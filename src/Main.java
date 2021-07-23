@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -25,6 +27,25 @@ public class Main {
             System.out.println(num);
 
         }
+    }
+
+    //take input from the user and split into arrays of string
+    public static void executeInteractively(){
+        System.out.println("Enter two numbers in alphabets and one operation code");
+        Scanner scanner = new Scanner(System.in);
+        String userInput = scanner.nextLine();
+        String [] words =userInput.split(" ");
+        performOperation(words);
+
+
+    }
+    // print out the result
+    public static void performOperation(String[] words) {
+        int leftNumber = valueFromString(words[0]);
+        int rightNumber = valueFromString(words[1]);
+        int operationCode= optCodeFromString(words[2]);
+        int result = execute(leftNumber,rightNumber,operationCode);
+        System.out.println(result);
     }
 
     private static void handleCommandLine(String[] args) {
