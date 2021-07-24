@@ -1,33 +1,83 @@
+import javafx.util.Builder;
+
 import java.util.Scanner;
 
 public class Main {
-
+    static int [] leftNumbers = {10,20,30,40};
+    static  int [] rightNumbers= {1,2,3,4};
+    static char [] code ={'a','s','m','/'};
+    static int [] result = new int [4];
     public static void main(String[] args) {
-	int [] leftNumbers = {10,20,30,40};
-	int [] rightNumbers= {1,2,3,4};
-	char [] code ={'a','b','c','d'};
-	int [] result = new int [4];
 
 
 	if (args.length==0){
         for (int i = 0; i <code.length ; i++) {
             result[i] = execute(leftNumbers[i],rightNumbers[i],code[i]);
+            printResultList(result);
 
         }
     }else if  (args.length==3){
 	    handleCommandLine(args);
         }
+	else if (args.length==1 && args[0].equalsIgnoreCase("interactive") ) {
+        executeInteractively();
+        }
 	else{
 	    System.out.println("Please provide 2 numeric values  and one operation code ");
     }
 
+    }
 
-        for ( int num:result
-             ) {
-            System.out.println(num);
+
+    // print out the result
+    public static void performOperation(String[] words) {
+        int leftNumber = valueFromString(words[0]);
+        int rightNumber = valueFromString(words[1]);
+        char  operationCode= optCodeFromString(words[2]);
+        int result = execute(leftNumber,rightNumber,operationCode);
+        displayResult(leftNumber,rightNumber,operationCode,result);
+
+    }
+
+    private static void displayResult(int leftNumber, int rightNumber, char  operationCode, int result) {
+        char symbol = symbolFromOptCode(operationCode);
+//        StringBuilder builder = new StringBuilder();
+//        builder.append(leftNumber);
+//        builder.append(" ");
+//        builder.append(symbol);
+//        builder.append(" ");
+//        builder.append(rightNumber);
+//        builder.append(" ");
+//        builder.append("= ");
+//        builder.append(" ");
+//        builder.append(result);
+
+        String output = String.format("%o %c %o = %o",leftNumber,symbol,rightNumber,result);
+        System.out.println(output);
+
+
+    }
+
+
+    private static char symbolFromOptCode(char operationCode){
+        char [] optcodes={'a','s','m','d'};
+        char [] symbols ={'+','-','*','/'};
+        char symbol=' ';
+        for (int i = 0; i <optcodes.length ; i++) {
+            if (optcodes[i] == operationCode){
+                symbol = symbols[i];
+                break;
+            }
 
         }
+
+
+        return symbol;
     }
+
+
+
+
 
     //take input from the user and split into arrays of string
     public static void executeInteractively(){
@@ -39,14 +89,7 @@ public class Main {
 
 
     }
-    // print out the result
-    public static void performOperation(String[] words) {
-        int leftNumber = valueFromString(words[0]);
-        int rightNumber = valueFromString(words[1]);
-        int operationCode= optCodeFromString(words[2]);
-        int result = execute(leftNumber,rightNumber,operationCode);
-        System.out.println(result);
-    }
+
 
     private static void handleCommandLine(String[] args) {
         int leftNumbers = Integer.parseInt(args[0]);
@@ -62,11 +105,11 @@ public class Main {
                result=  leftNumbers + rightNumbers;
                break;
 
-           case 'b':
+           case 's':
                result=  leftNumbers - rightNumbers;
                break;
 
-           case 'c':
+           case 'm':
                result= leftNumbers * rightNumbers;
                break;
 
@@ -105,6 +148,14 @@ public class Main {
 
        return value;
    }
+
+    public static void  printResultList(int [] result){
+        for ( int num:result
+        ) {
+            System.out.println(num);
+
+        }
+    }
 }
 
 
