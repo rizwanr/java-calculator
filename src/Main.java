@@ -1,5 +1,6 @@
 import javafx.util.Builder;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -31,11 +32,26 @@ public class Main {
 
     // print out the result
     public static void performOperation(String[] words) {
-        int leftNumber = valueFromString(words[0]);
-        int rightNumber = valueFromString(words[1]);
-        char  operationCode= optCodeFromString(words[2]);
-        int result = execute(leftNumber,rightNumber,operationCode);
-        displayResult(leftNumber,rightNumber,operationCode,result);
+        char operationCode = optCodeFromString(words[2]);
+        if (operationCode == 'w'){
+            handleWhen(words);
+        }else {
+            int leftNumber = valueFromString(words[0]);
+            int rightNumber = valueFromString(words[1]);
+            int result = execute(leftNumber, rightNumber, operationCode);
+            displayResult(leftNumber, rightNumber, operationCode, result);
+        }
+
+    }
+
+    private static void handleWhen(String[] words) {
+        LocalDate startDate = LocalDate.parse(words[0]);
+        long daysToAdd = valueFromString(words[1]);
+        LocalDate newDate = startDate.plusDays(daysToAdd);
+        String output  = String.format("%s plus %o %s",startDate, daysToAdd, newDate);
+
+        System.out.print(output);
+
 
     }
 
@@ -59,21 +75,6 @@ public class Main {
     }
 
 
-    private static char symbolFromOptCode(char operationCode){
-        char [] optcodes={'a','s','m','d'};
-        char [] symbols ={'+','-','*','/'};
-        char symbol=' ';
-        for (int i = 0; i <optcodes.length ; i++) {
-            if (optcodes[i] == operationCode){
-                symbol = symbols[i];
-                break;
-            }
-
-        }
-
-
-        return symbol;
-    }
 
 
 
@@ -130,19 +131,39 @@ public class Main {
         return optCode;
    }
 
+    private static char symbolFromOptCode(char operationCode){
+        char [] optcodes={'a','s','m','d'};
+        char [] symbols ={'+','-','*','/'};
+        char symbol=' ';
+        for (int i = 0; i <optcodes.length ; i++) {
+            if (optcodes[i] == operationCode){
+                symbol = symbols[i];
+                break;
+            }
+
+        }
+
+
+        return symbol;
+    }
+
    // changing the value of strings to values so that we can calculate
    public static int valueFromString(String word){
         String [] numberWords={ "zero", "one", "two", "three", "four", "five","six","seven","eight","nine", "ten"
        };
 
-        int value=0;
+        int value= -1;
         for (int i = 0; i < numberWords.length ; i++) {
-            if (word.equals(numberWords[i])){
+            if (word.contains(numberWords[i])){
                 value = i;
                 break;
             }
 
 
+       }
+
+       if (value == -1){
+           value = Integer.parseInt(word);
        }
 
 
